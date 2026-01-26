@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three.js Journey - Exercises</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          'Inter',
+          'SF Pro Display',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: #000000;
+        color: #ffffff;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* 배경 그리드 패턴 */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+          linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* 네온 글로우 효과 */
+      body::after {
+        content: '';
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        animation: pulse 8s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translate(10%, 10%) scale(1.1);
+          opacity: 0.8;
+        }
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 4rem;
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        background: linear-gradient(180deg, #ffffff 0%, #00ffff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+        position: relative;
+      }
+
+      h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #00ffff, transparent);
+        box-shadow: 0 0 10px #00ffff;
+      }
+
+      .subtitle {
+        color: #888888;
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        margin-top: 2rem;
+      }
+
+      .exercises-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .exercise-card {
+        width: 100%;
+        max-width: 500px;
+        background: rgba(10, 10, 10, 0.8);
+        border: 1px solid rgba(0, 255, 255, 0.2);
+        border-left: 3px solid #00ffff;
+        padding: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .exercise-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(0, 255, 255, 0.05) 0%,
+          transparent 100%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .exercise-card::after {
+        content: '→';
+        position: absolute;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: #00ffff;
+        opacity: 0;
+        transition: all 0.4s ease;
+      }
+
+      .exercise-card:hover {
+        transform: translateX(10px);
+        border-color: #00ffff;
+        box-shadow:
+          0 0 20px rgba(0, 255, 255, 0.3),
+          inset 0 0 20px rgba(0, 255, 255, 0.05);
+        background: rgba(10, 10, 10, 0.95);
+      }
+
+      .exercise-card:hover::before {
+        opacity: 1;
+      }
+
+      .exercise-card:hover::after {
+        opacity: 1;
+        transform: translateY(-50%) translateX(5px);
+      }
+
+      .exercise-number {
+        font-size: 0.75rem;
+        color: #00ffff;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-family: 'Courier New', monospace;
+      }
+
+      .exercise-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666666;
+      }
+
+      .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      /* 스크롤바 스타일 */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #000000;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #00ffff;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #00cccc;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .container {
+          padding: 2rem 1rem;
+        }
+
+        .exercise-card {
+          padding: 1.5rem;
+        }
+
+        .exercise-title {
+          font-size: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Three.js Journey</h1>
+        <p class="subtitle">Exercises</p>
+      </header>
+
+      <div id="exercises-container" class="exercises-grid">
+        <!-- Exercise cards will be dynamically generated here -->
+      </div>
+    </div>
+
+    <script type="module">
+      // Exercise 데이터
+      const exercises = [
+        {
+          number: '03',
+          title: 'First Three.js Project',
+          path: '/exercise/03-first-threejs-project/index.html',
+        },
+        {
+          number: '04',
+          title: 'Transform objects',
+          path: '/exercise/04-transform-objects/index.html',
+        },
+        {
+          number: '05',
+          title: 'Animations',
+          path: '/exercise/05-animations/index.html',
+        },
+      ]
+
+      const container = document.getElementById('exercises-container')
+
+      if (exercises.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <p>아직 등록된 exercise가 없습니다.</p>
+          </div>
+        `
+      } else {
+        exercises.forEach(exercise => {
+          const card = document.createElement('a')
+          card.href = exercise.path
+          card.className = 'exercise-card'
+          card.innerHTML = `
+            <div class="exercise-number">Exercise ${exercise.number}</div>
+            <div class="exercise-title">${exercise.title}</div>
+          `
+          container.appendChild(card)
+        })
+      }
+    </script>
+  </body>
+</html>

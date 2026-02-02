@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -13,12 +13,8 @@
       }
 
       body {
-        font-family:
-          'Inter',
-          'SF Pro Display',
-          -apple-system,
-          BlinkMacSystemFont,
-          sans-serif;
+        font-family: "Inter", "SF Pro Display", -apple-system,
+          BlinkMacSystemFont, sans-serif;
         background: #000000;
         color: #ffffff;
         min-height: 100vh;
@@ -28,14 +24,16 @@
 
       /* 배경 그리드 패턴 */
       body::before {
-        content: '';
+        content: "";
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-image:
-          linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        background-image: linear-gradient(
+            rgba(0, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
           linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
         background-size: 50px 50px;
         pointer-events: none;
@@ -44,7 +42,7 @@
 
       /* 네온 글로우 효과 */
       body::after {
-        content: '';
+        content: "";
         position: fixed;
         top: -50%;
         left: -50%;
@@ -106,7 +104,7 @@
       }
 
       h1::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -10px;
         left: 50%;
@@ -152,7 +150,7 @@
       }
 
       .exercise-card::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
@@ -168,7 +166,7 @@
       }
 
       .exercise-card::after {
-        content: '→';
+        content: "→";
         position: absolute;
         right: 2rem;
         top: 50%;
@@ -182,8 +180,7 @@
       .exercise-card:hover {
         transform: translateX(10px);
         border-color: #00ffff;
-        box-shadow:
-          0 0 20px rgba(0, 255, 255, 0.3),
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3),
           inset 0 0 20px rgba(0, 255, 255, 0.05);
         background: rgba(10, 10, 10, 0.95);
       }
@@ -204,7 +201,7 @@
         margin-bottom: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.15em;
-        font-family: 'Courier New', monospace;
+        font-family: "Courier New", monospace;
       }
 
       .exercise-title {
@@ -279,53 +276,63 @@
       // Exercise 데이터
       const exercises = [
         {
-          number: '03',
-          title: 'First Three.js Project',
-          path: '/exercise/03-first-threejs-project/index.html',
+          number: "03",
+          title: "First Three.js Project",
+          path: "/exercise/03-first-threejs-project/index.html",
         },
         {
-          number: '04',
-          title: 'Transform objects',
-          path: '/exercise/04-transform-objects/index.html',
+          number: "04",
+          title: "Transform objects",
+          path: "/exercise/04-transform-objects/index.html",
         },
         {
-          number: '05',
-          title: 'Animations',
-          path: '/exercise/05-animations/index.html',
+          number: "05",
+          title: "Animations",
+          path: "/exercise/05-animations/index.html",
         },
         {
-          number: '06',
-          title: 'Cameras',
-          path: '/exercise/06-cameras/index.html',
+          number: "06",
+          title: "Cameras",
+          path: "/exercise/06-cameras/index.html",
         },
         {
-          number: '07',
-          title: 'Fullscreen and resizing',
-          path: '/exercise/07-fullscreen-and-resizing/index.html',
+          number: "07",
+          title: "Fullscreen and resizing",
+          path: "/exercise/07-fullscreen-and-resizing/index.html",
         },
         {
-          number: '08',
-          title: 'Geometries',
-          path: '/exercise/08-geometries/index.html',
+          number: "08",
+          title: "Geometries",
+          path: "/exercise/08-geometries/index.html",
         },
         {
-          number: '09',
-          title: 'Debug UI',
-          path: '/exercise/09-debug-ui/index.html',
+          number: "09",
+          title: "Debug UI",
+          path: "/exercise/09-debug-ui/index.html",
         },
         {
-          number: '10',
-          title: 'Textures',
-          path: '/exercise/10-textures/index.html',
+          number: "10",
+          title: "Textures",
+          path: "/exercise/10-textures/index.html",
         },
         {
-          number: '11',
-          title: 'Materials',
-          path: '/exercise/11-materials/index.html',
+          number: "11",
+          title: "Materials",
+          path: "/exercise/11-materials/index.html",
         },
-      ]
+        {
+          number: "12",
+          title: "3D Text",
+          path: "/exercise/12-3d-text/index.html",
+        },
+        {
+          number: "16",
+          title: "Haunted House",
+          path: "/exercise/16-haunted-house/index.html",
+        },
+      ];
 
-      const container = document.getElementById('exercises-container')
+      const container = document.getElementById("exercises-container");
 
       if (exercises.length === 0) {
         container.innerHTML = `
@@ -333,18 +340,18 @@
             <div class="empty-state-icon">📦</div>
             <p>아직 등록된 exercise가 없습니다.</p>
           </div>
-        `
+        `;
       } else {
-        exercises.forEach(exercise => {
-          const card = document.createElement('a')
-          card.href = exercise.path
-          card.className = 'exercise-card'
+        exercises.forEach((exercise) => {
+          const card = document.createElement("a");
+          card.href = exercise.path;
+          card.className = "exercise-card";
           card.innerHTML = `
             <div class="exercise-number">Exercise ${exercise.number}</div>
             <div class="exercise-title">${exercise.title}</div>
-          `
-          container.appendChild(card)
-        })
+          `;
+          container.appendChild(card);
+        });
       }
     </script>
   </body>

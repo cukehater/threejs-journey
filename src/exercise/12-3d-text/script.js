@@ -26,15 +26,15 @@ const axesHelper = new THREE.AxesHelper();
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
-const matcapTexture = textureLoader.load("/textures/matcaps/1.png");
+const matcapTexture = textureLoader.load("/textures/matcaps/4.png");
 matcapTexture.colorSpace = THREE.SRGBColorSpace;
 
 /**
  * Fonts
  */
 const fontLoader = new FontLoader();
-fontLoader.load("./fonts/montserrat.facefont.json", (font) => {
-  const textGeometry = new TextGeometry("Hello Three.js", {
+fontLoader.load("./fonts/roboto.facefont.json", (font) => {
+  const textGeometry = new TextGeometry("KIM SUMIN", {
     font,
     size: 0.5,
     depth: 0.2,

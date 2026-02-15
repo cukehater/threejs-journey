@@ -1,3 +1,10 @@
+/**
+ * 진입점 (Entry Point)
+ * ----------------------------------------
+ * HTML의 canvas.webgl을 넘겨 Experience를 한 번만 생성합니다.
+ * Experience가 싱글톤이므로, 이후 Camera/Renderer/World 등에서
+ * new Experience()를 호출해도 이와 동일한 인스턴스를 참조합니다.
+ */
 import Experience from "./experience/experience.js";
 
 const experience = new Experience(document.querySelector("canvas.webgl"));

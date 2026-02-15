@@ -1,9 +1,21 @@
+/**
+ * EventEmitter (이벤트 방출기)
+ * ----------------------------------------
+ * "이벤트 이름"으로 함수를 등록하고, 나중에 그 이름을 부르면 등록된 함수들이 실행됩니다.
+ * 예: on("resize", fn) → trigger("resize") 시 fn() 실행.
+ *
+ * [OOP] 다른 클래스(Sizes, Time, Resources)가 이 클래스를 "상속(extends)"해서
+ * .on(), .off(), .trigger() 메서드를 그대로 쓸 수 있게 합니다.
+ */
+
 export default class EventEmitter {
   constructor() {
+    // 이벤트 이름별로 콜백 함수 배열을 저장 (예: { base: { resize: [fn1], tick: [fn2] } })
     this.callbacks = {};
     this.callbacks.base = {};
   }
 
+  /** 이벤트 이름 _names에 callback 함수 등록 (구독). 체이닝을 위해 this 반환 */
   on(_names, callback) {
     // Errors
     if (typeof _names === "undefined" || _names === "") {
@@ -39,6 +51,7 @@ export default class EventEmitter {
     return this;
   }
 
+  /** 등록된 이벤트 리스너 제거 (구독 해제) */
   off(_names) {
     // Errors
     if (typeof _names === "undefined" || _names === "") {
@@ -95,6 +108,7 @@ export default class EventEmitter {
     return this;
   }
 
+  /** 이벤트 _name을 발생시켜 해당 이름으로 등록된 모든 콜백 실행. _args는 콜백에 전달할 인자 배열 */
   trigger(_name, _args) {
     // Errors
     if (typeof _name === "undefined" || _name === "") {
@@ -150,6 +164,7 @@ export default class EventEmitter {
     return finalResult;
   }
 
+  /** "name1, name2" 같은 문자열을 ["name1", "name2"] 배열로 변환 */
   resolveNames(_names) {
     let names = _names;
     names = names.replace(/[^a-zA-Z0-9 ,/.]/g, "");
@@ -159,6 +174,7 @@ export default class EventEmitter {
     return names;
   }
 
+  /** "eventName.namespace" 형태를 { value, namespace } 객체로 파싱 */
   resolveName(name) {
     const newName = {};
     const parts = name.split(".");

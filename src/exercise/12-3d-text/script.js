@@ -33,17 +33,17 @@ matcapTexture.colorSpace = THREE.SRGBColorSpace;
  * Fonts
  */
 const fontLoader = new FontLoader();
-fontLoader.load("./fonts/roboto.facefont.json", (font) => {
-  const textGeometry = new TextGeometry("KIM SUMIN", {
+fontLoader.load("./fonts/Noto Sans KR_Regular.json", (font) => {
+  const textGeometry = new TextGeometry("마르코", {
     font,
     size: 0.5,
     depth: 0.2,
-    curveSegments: 3,
+    curveSegments: 1,
     bevelEnabled: true,
     bevelThickness: 0.03,
     bevelSize: 0.02,
     bevelOffset: 0,
-    bevelSegments: 4,
+    bevelSegments: 1,
   });
 
   // textGeometry.computeBoundingBox();
@@ -54,34 +54,38 @@ fontLoader.load("./fonts/roboto.facefont.json", (font) => {
   // );
   textGeometry.center();
 
-  const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
-
-  const text = new THREE.Mesh(textGeometry, material);
+  const fontMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
+  const text = new THREE.Mesh(textGeometry, fontMaterial);
 
   camera.lookAt(text.position);
   scene.add(text);
-
-  console.time("donut");
-  const donutGeometry = new THREE.TorusGeometry(0.3, 0.15, 20, 45);
-
-  for (let i = 0; i < 200; i++) {
-    const donut = new THREE.Mesh(donutGeometry, material);
-    donut.position.x = (Math.random() - 0.5) * 10;
-    donut.position.y = (Math.random() - 0.5) * 10;
-    donut.position.z = (Math.random() - 0.5) * 10;
-    donut.rotation.x = Math.random() * Math.PI * 2;
-    donut.rotation.y = Math.random() * Math.PI * 2;
-
-    const randomScale = Math.random();
-    donut.scale.x = randomScale;
-    donut.scale.y = randomScale;
-    donut.scale.z = randomScale;
-
-    scene.add(donut);
-  }
-
-  console.timeEnd("donut");
 });
+
+console.time("donut");
+const donutMatcapTexture = textureLoader.load("/textures/matcaps/7.png");
+const donutMaterial = new THREE.MeshMatcapMaterial({
+  matcap: donutMatcapTexture,
+});
+donutMatcapTexture.colorSpace = THREE.SRGBColorSpace;
+const donutGeometry = new THREE.TorusGeometry(0.3, 0.15, 20, 45);
+
+for (let i = 0; i < 200; i++) {
+  const donut = new THREE.Mesh(donutGeometry, donutMaterial);
+  donut.position.x = (Math.random() - 0.5) * 10;
+  donut.position.y = (Math.random() - 0.5) * 10;
+  donut.position.z = (Math.random() - 0.5) * 10;
+  donut.rotation.x = Math.random() * Math.PI * 2;
+  donut.rotation.y = Math.random() * Math.PI * 2;
+
+  const randomScale = Math.random();
+  donut.scale.x = randomScale;
+  donut.scale.y = randomScale;
+  donut.scale.z = randomScale;
+
+  scene.add(donut);
+}
+
+console.timeEnd("donut");
 
 /**
  * Sizes
@@ -113,7 +117,7 @@ const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
   0.1,
-  100
+  100,
 );
 camera.position.x = 1;
 camera.position.y = 1;

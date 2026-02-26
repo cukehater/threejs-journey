@@ -12,6 +12,7 @@ const parameters = {
 };
 gui.addColor(parameters, "materialColor").onChange((value) => {
   material.color.set(value);
+  particlesMaterial.color.set(value);
 });
 
 /**
@@ -42,7 +43,7 @@ const mesh1 = new THREE.Mesh(new THREE.TorusGeometry(1, 0.4, 16, 60), material);
 const mesh2 = new THREE.Mesh(new THREE.ConeGeometry(1, 2, 32), material);
 const mesh3 = new THREE.Mesh(
   new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
-  material
+  material,
 );
 
 mesh1.position.y = -objectsDistance * 0;
@@ -71,7 +72,7 @@ for (let i = 0; i < particlesCount; i++) {
 const particlesGeometry = new THREE.BufferGeometry();
 particlesGeometry.setAttribute(
   "position",
-  new THREE.BufferAttribute(positions, 3)
+  new THREE.BufferAttribute(positions, 3),
 );
 
 const particlesMaterial = new THREE.PointsMaterial({
@@ -128,7 +129,7 @@ const camera = new THREE.PerspectiveCamera(
   35,
   sizes.width / sizes.height,
   0.1,
-  100
+  100,
 );
 camera.position.z = 6;
 cameraGroup.add(camera);
@@ -191,8 +192,10 @@ const tick = () => {
 
   camera.position.y = (-scrollY / sizes.height) * objectsDistance;
 
-  cameraGroup.position.y += (cursor.y - cameraGroup.position.y) * 5 * deltaTime;
-  cameraGroup.position.x += (cursor.x - cameraGroup.position.x) * 5 * deltaTime;
+  // cameraGroup.position.y += (cursor.y - cameraGroup.position.y) * 5 * deltaTime;
+  // cameraGroup.position.x += (cursor.x - cameraGroup.position.x) * 5 * deltaTime;
+  cameraGroup.position.y += (cursor.y - cameraGroup.position.y) * 1 * deltaTime;
+  cameraGroup.position.x += (cursor.x - cameraGroup.position.x) * 1 * deltaTime;
 
   for (const mesh of meshes) {
     mesh.rotation.y += deltaTime * 0.2;

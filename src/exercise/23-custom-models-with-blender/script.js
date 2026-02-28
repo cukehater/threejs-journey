@@ -7,9 +7,6 @@ import GUI from "lil-gui";
 /**
  * Base
  */
-// Debug
-const gui = new GUI();
-
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
@@ -27,7 +24,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 let mixer = null;
 
-gltfLoader.load("/models/Hamburger/hamburger.glb", (gltf) => {
+gltfLoader.load("/models/hamburger.glb", (gltf) => {
   scene.add(gltf.scene);
 });
 
@@ -40,7 +37,7 @@ const floor = new THREE.Mesh(
     color: "#444444",
     metalness: 0,
     roughness: 0.5,
-  })
+  }),
 );
 floor.receiveShadow = true;
 floor.rotation.x = -Math.PI * 0.5;
@@ -93,7 +90,7 @@ const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
   0.1,
-  100
+  100,
 );
 camera.position.set(-8, 4, 8);
 scene.add(camera);

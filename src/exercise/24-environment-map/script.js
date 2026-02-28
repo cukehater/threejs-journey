@@ -1,15 +1,13 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
-import {
-  EXRLoader,
-  GLTFLoader,
-  GroundedSkybox,
-} from "three/examples/jsm/Addons.js";
-import { RGBELoader } from "three/examples/jsm/Addons.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+import { EXRLoader } from "three/addons/loaders/EXRLoader.js";
+import { GroundedSkybox } from "three/addons/objects/GroundedSkybox.js";
 
 /**
- * Loader
+ * Loaders
  */
 const gltfLoader = new GLTFLoader();
 const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -22,18 +20,22 @@ const textureLoader = new THREE.TextureLoader();
  */
 // Debug
 const gui = new GUI();
+const global = {};
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
+
 /**
  * Environment map
  */
 scene.environmentIntensity = 1;
 scene.backgroundBlurriness = 0;
 scene.backgroundIntensity = 1;
+// scene.backgroundRotation.x = 1
+// scene.environmentRotation.x = 2
 
 gui.add(scene, "environmentIntensity").min(0).max(10).step(0.001);
 gui.add(scene, "backgroundBlurriness").min(0).max(1).step(0.001);
@@ -51,80 +53,89 @@ gui
   .step(0.001)
   .name("environmentRotationY");
 
-// LDR cube texture
-/* const environmentMapTexture = cubeTextureLoader.load([
-  "/textures/environmentMaps/1/px.png",
-  "/textures/environmentMaps/1/nx.png",
-  "/textures/environmentMaps/1/py.png",
-  "/textures/environmentMaps/1/ny.png",
-  "/textures/environmentMaps/1/pz.png",
-  "/textures/environmentMaps/1/nz.png",
-]); */
+// // LDR cube texture
+// const environmentMap = cubeTextureLoader.load([
+//     '/environmentMaps/2/px.png',
+//     '/environmentMaps/2/nx.png',
+//     '/environmentMaps/2/py.png',
+//     '/environmentMaps/2/ny.png',
+//     '/environmentMaps/2/pz.png',
+//     '/environmentMaps/2/nz.png'
+// ])
 
-// HDR(RGBE) texture
-/* rgbeLoader.load(
-  "/textures/environmentMaps/blender-2k.hdr",
-  (environmentMap) => {
-    environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+// scene.environment = environmentMap
+// scene.background = environmentMap
 
-    // scene.background = environmentMap
-    scene.environment = environmentMap;
-  }
-); */
+// // HDR (RGBE) equirectangular
+// rgbeLoader.load('/environmentMaps/blender-2k.hdr', (environmentMap) =>
+// {
+//     environmentMap.mapping = THREE.EquirectangularReflectionMapping
 
-// HDR (EXR) equirectangular
-/* exrLoader.load(
-  "/textures/environmentMaps/nvidiaCanvas-4k.exr",
-  (environmentMap) => {
-    environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+//     // scene.background = environmentMap
+//     scene.environment = environmentMap
+// })
 
-    scene.background = environmentMap;
-    scene.environment = environmentMap;
-  }
-); */
+// // HDR (EXR) equirectangular
+// exrLoader.load('/environmentMaps/nvidiaCanvas-4k.exr', (environmentMap) =>
+// {
+//     environmentMap.mapping = THREE.EquirectangularReflectionMapping
+
+//     scene.background = environmentMap
+//     scene.environment = environmentMap
+// })
+
+// // LDR equirectangular
+// const environmentMap = textureLoader.load('/environmentMaps/blockadesLabsSkybox/anime_art_style_japan_streets_with_cherry_blossom_.jpg')
+// environmentMap.mapping = THREE.EquirectangularReflectionMapping
+// environmentMap.colorSpace = THREE.SRGBColorSpace
+// scene.background = environmentMap
+// scene.environment = environmentMap
 
 // Ground projected skybox
-/* rgbeLoader.load("/textures/environmentMaps/2/2k.hdr", (environmentMap) => {
+rgbeLoader.load("/environmentMaps/2/2k.hdr", (environmentMap) => {
   environmentMap.mapping = THREE.EquirectangularReflectionMapping;
 
   scene.environment = environmentMap;
-  const skybox = new GroundedSkybox(environmentMap, 15, 70, 32);
-  // skybox.material.wireframe = true;
+
+  // Skybox
+  const skybox = new GroundedSkybox(environmentMap, 15, 70);
+  // skybox.material.wireframe = true
   skybox.position.y = 15;
   scene.add(skybox);
-}); */
-
-/**
- * Real time environment map
- */
-// Base environment map
-const environmentMap = textureLoader.load(
-  "/textures/environmentMaps/blockadesLabsSkybox/interior_views_cozy_wood_cabin_with_cauldron_and_p.jpg"
-);
-environmentMap.mapping = THREE.EquirectangularReflectionMapping;
-environmentMap.colorSpace = THREE.SRGBColorSpace;
-
-scene.background = environmentMap;
-
-// Holy donut
-const holyDonut = new THREE.Mesh(
-  new THREE.TorusGeometry(8, 0.5),
-  new THREE.MeshBasicMaterial({ color: new THREE.Color(10, 4, 2) })
-);
-holyDonut.layers.enable(1);
-holyDonut.position.y = 3.5;
-scene.add(holyDonut);
-
-// Cube render target
-const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
-  type: THREE.FloatType,
 });
 
-scene.environment = cubeRenderTarget.texture;
+// /**
+//  * Real time environment map
+//  */
+// // Base environment map
+// const environmentMap = textureLoader.load('/environmentMaps/blockadesLabsSkybox/interior_views_cozy_wood_cabin_with_cauldron_and_p.jpg')
+// environmentMap.mapping = THREE.EquirectangularReflectionMapping
+// environmentMap.colorSpace = THREE.SRGBColorSpace
 
-// Cube camera
-const cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRenderTarget);
-cubeCamera.layers.set(1);
+// scene.background = environmentMap
+
+// // Holy donut
+// const holyDonut = new THREE.Mesh(
+//     new THREE.TorusGeometry(8, 0.5),
+//     new THREE.MeshBasicMaterial({ color: new THREE.Color(10, 4, 2) })
+// )
+// holyDonut.layers.enable(1)
+// holyDonut.position.y = 3.5
+// scene.add(holyDonut)
+
+// // Cube render target
+// const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(
+//     256,
+//     {
+//         type: THREE.FloatType
+//     }
+// )
+
+// scene.environment = cubeRenderTarget.texture
+
+// // Cube camera
+// const cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRenderTarget)
+// cubeCamera.layers.set(1)
 
 /**
  * Torus Knot
@@ -135,14 +146,14 @@ const torusKnot = new THREE.Mesh(
     roughness: 0,
     metalness: 1,
     color: 0xaaaaaa,
-  })
+  }),
 );
 torusKnot.position.x = -4;
 torusKnot.position.y = 4;
 scene.add(torusKnot);
 
 /**
- * models
+ * Models
  */
 gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
   gltf.scene.scale.set(10, 10, 10);
@@ -179,9 +190,9 @@ const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
   0.1,
-  100
+  100,
 );
-camera.position.set(4, 5, 8);
+camera.position.set(4, 5, 4);
 scene.add(camera);
 
 // Controls
@@ -206,12 +217,13 @@ const tick = () => {
   // Time
   const elapsedTime = clock.getElapsedTime();
 
-  // Real time environment map
-  if (holyDonut) {
-    holyDonut.rotation.x = Math.sin(elapsedTime) * 2;
+  // // Real time environment map
+  // if(holyDonut)
+  // {
+  //     holyDonut.rotation.x = Math.sin(elapsedTime) * 2
 
-    cubeCamera.update(renderer, scene);
-  }
+  //     cubeCamera.update(renderer, scene)
+  // }
 
   // Update controls
   controls.update();

@@ -132,15 +132,8 @@ gui
  * Models
  */
 // Helmet
-/* gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
+gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
   gltf.scene.scale.set(10, 10, 10);
-  scene.add(gltf.scene);
-
-  updateAllMaterials();
-}); */
-gltfLoader.load("/models/hamburger.glb", (gltf) => {
-  gltf.scene.scale.set(0.5, 0.5, 0.5);
-  gltf.scene.position.y = 1;
   scene.add(gltf.scene);
 
   updateAllMaterials();
